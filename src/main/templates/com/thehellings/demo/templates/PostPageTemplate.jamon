@@ -1,0 +1,11 @@
+<%extends Page>
+<%import>
+    com.thehellings.demo.db.Post;
+    com.thehellings.demo.db.Comment;
+</%import>
+<%args>
+    Post post;
+</%args>
+<h2><% post.getTitle() %><br />
+<small><% post.getSummary() #n %></small></h2>
+<% post.getBody() #n %>

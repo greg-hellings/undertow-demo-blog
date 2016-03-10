@@ -1,0 +1,13 @@
+<%extends AdminBase>
+<%import>
+        com.thehellings.demo.db.Post;
+        java.util.List;
+</%import>
+<%args>
+    List<com.thehellings.demo.db.Post> posts;
+</%args>
+<%for Post post : posts %>
+    <h3><% post.getTitle() %></h3>
+    <a href="/post/<% post.getId() %>">view</a>
+    <a href="/admin/post/<% post.getId() %>">edit</a>
+</%for>

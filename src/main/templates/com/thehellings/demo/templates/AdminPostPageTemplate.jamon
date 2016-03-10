@@ -1,0 +1,31 @@
+<%extends AdminBase>
+<%import>
+    com.thehellings.demo.db.Post;
+</%import>
+<%args>
+    Post post;
+</%args>
+<form method="post">
+    <table style="border: 0">
+        <tr>
+            <td><label for="title">Title</label></td>
+            <td><input type="text" name="title" value="<% post.getTitle() %>" size="70"/></td>
+            <td><input type="submit" name="Save" value="Save"/></td>
+        </tr>
+        <tr>
+            <td><label for="summary">Summary</label></td>
+            <td><input type="text" name="summary" value="<% post.getSummary() %>" size="70"/></td>
+            <td><input type="submit" name="Cancel" value="Cancel" onclick="javascript:window.location.href='/admin/post'" /></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <textarea name="body" cols="120" rows="75">
+                    <% post.getBody() %>
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><i>Use full HTML in these fields</i></td>
+        </tr>
+    </table>
+</form>

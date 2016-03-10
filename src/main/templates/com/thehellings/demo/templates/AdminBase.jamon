@@ -1,0 +1,4 @@
+<%abstract>
+<%extends Page>
+<h1>Administration</h1>
+<& *CHILD &>

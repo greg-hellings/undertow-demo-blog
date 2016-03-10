@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/7/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/7/modelMap http://cayenne.apache.org/schema/7/modelMap.xsd"
+	 project-version="7">
+	<property name="defaultPackage" value="com.thehellings.demo.db"/>
+	<db-entity name="comment">
+		<db-attribute name="body" type="CLOB"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="parent_id" type="INTEGER"/>
+		<db-attribute name="post_id" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="poster" type="VARCHAR" length="255"/>
+	</db-entity>
+	<db-entity name="post">
+		<db-attribute name="body" type="CLOB"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="poster_id" type="INTEGER"/>
+		<db-attribute name="summary" type="VARCHAR" length="255"/>
+		<db-attribute name="title" type="VARCHAR" length="255"/>
+	</db-entity>
+	<db-entity name="user">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="isAdmin" type="BOOLEAN"/>
+		<db-attribute name="password" type="VARCHAR" length="255"/>
+		<db-attribute name="username" type="VARCHAR" isMandatory="true" length="255"/>
+	</db-entity>
+	<obj-entity name="Comment" className="com.thehellings.demo.db.Comment" dbEntityName="comment">
+		<obj-attribute name="body" type="java.lang.String" db-attribute-path="body"/>
+		<obj-attribute name="id" type="int" db-attribute-path="id"/>
+		<obj-attribute name="poster" type="java.lang.String" db-attribute-path="poster"/>
+	</obj-entity>
+	<obj-entity name="Post" className="com.thehellings.demo.db.Post" dbEntityName="post">
+		<obj-attribute name="body" type="java.lang.String" db-attribute-path="body"/>
+		<obj-attribute name="id" type="int" db-attribute-path="id"/>
+		<obj-attribute name="summary" type="java.lang.String" db-attribute-path="summary"/>
+		<obj-attribute name="title" type="java.lang.String" db-attribute-path="title"/>
+	</obj-entity>
+	<obj-entity name="User" className="com.thehellings.demo.db.User" dbEntityName="user">
+		<obj-attribute name="isAdmin" type="java.lang.Boolean" db-attribute-path="isAdmin"/>
+		<obj-attribute name="password" type="java.lang.String" db-attribute-path="password"/>
+		<obj-attribute name="username" type="java.lang.String" db-attribute-path="username"/>
+	</obj-entity>
+	<db-relationship name="children" source="comment" target="comment" toMany="true">
+		<db-attribute-pair source="id" target="parent_id"/>
+	</db-relationship>
+	<db-relationship name="parent" source="comment" target="comment" toMany="false">
+		<db-attribute-pair source="parent_id" target="id"/>
+	</db-relationship>
+	<db-relationship name="post" source="comment" target="post" toMany="false">
+		<db-attribute-pair source="post_id" target="id"/>
+	</db-relationship>
+	<db-relationship name="comments" source="post" target="comment" toMany="true">
+		<db-attribute-pair source="id" target="post_id"/>
+	</db-relationship>
+	<db-relationship name="poster" source="post" target="user" toMany="false">
+		<db-attribute-pair source="poster_id" target="id"/>
+	</db-relationship>
+	<db-relationship name="posts" source="user" target="post" toMany="true">
+		<db-attribute-pair source="id" target="poster_id"/>
+	</db-relationship>
+	<obj-relationship name="children" source="Comment" target="Comment" deleteRule="Deny" db-relationship-path="children"/>
+	<obj-relationship name="parent" source="Comment" target="Comment" deleteRule="Nullify" db-relationship-path="parent"/>
+	<obj-relationship name="post" source="Comment" target="Post" deleteRule="Nullify" db-relationship-path="post"/>
+	<obj-relationship name="comments" source="Post" target="Comment" deleteRule="Deny" db-relationship-path="comments"/>
+	<obj-relationship name="poster" source="Post" target="User" deleteRule="Nullify" db-relationship-path="poster"/>
+	<obj-relationship name="posts" source="User" target="Post" deleteRule="Deny" db-relationship-path="posts"/>
+	<query name="Post count" factory="org.apache.cayenne.map.SQLTemplateBuilder" root="data-map" root-name="datamap">
+		<property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+		<property name="cayenne.GenericSelectQuery.cacheStrategy" value="LOCAL_CACHE"/>
+		<sql><![CDATA[select count(*) as count from post]]></sql>
+	</query>
+</data-map>

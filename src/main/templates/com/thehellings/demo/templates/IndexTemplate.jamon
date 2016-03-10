@@ -1,0 +1,12 @@
+<%extends Page>
+<%import>
+        com.thehellings.demo.db.Post;
+        java.util.Collection;
+</%import>
+<%args>
+        Collection<com.thehellings.demo.db.Post> posts;
+</%args>
+<%for Post post : posts %>
+    <h2><a href="/post/<% post.getId() %>"><% post.getTitle() %></a></h2>
+    <p><% post.getSummary() #n %></p>
+</%for>
